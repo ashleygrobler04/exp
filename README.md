@@ -1,59 +1,49 @@
 # Exp
+An expense tracker written in angular. This just me learning angular, what better way than to learn by doing and this is A good project to get started with as I managed to make it work better than the other one I worked on in the passed.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.1.
 
-## Development server
+### Running
 
-To start a local development server, run:
+In order to run the application, make sure you got all the deps installed by doing the following:
 
-```bash
-ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+NPM
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Then do:
 
-```bash
-ng generate --help
+```
+npm
+npm start
+
 ```
 
-## Building
 
-To build the project run:
+### How does it work?
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+When you launch the application, you might see A parragraph explaining what the app is in short, but then there is A checkbox. You can use it to filter by category of your expenses.
 
-## Running unit tests
+If checked, you see the category you are filtering by. Changing the category, allows for filtering by that category. The total spent by that category updates dynamicly as you change the category. Un-checking the box, will hide it and keep displaying the total spent over all. 
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+To add an expense, you just enter the price, then you choose the category it belongs to, then enter the expense and submit.  If successfull, you will see it being updated in the list. If the list is empty, you will be notified.
 
-```bash
-ng test
-```
+In the list, you will see the delete button for each expense. Clicking on it will delete the expense from the list and no longer ve visible.
 
-## Running end-to-end tests
+I purposfully did not add the functionality to edit an expense as you will be able to delete and add another one again. This application does not hold your hand if you delete the expense. You need to be sure you no longer need it anymore. Besides, adding another one is not that hard at all, and it is not as if you are writing an essay to add one also.
 
-For end-to-end (e2e) testing, run:
 
-```bash
-ng e2e
-```
+### To do:
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Additional Resources
+* I probably have to work on the styling. Since I am blind, this is not where I shine at all. Though I will probs try to do so with AI in the near future.
+* Local storage: Allow for the application to percist data to the local storage, by writing A service that will just save and remove data if and when needed, as we handle expense removal and insertion in A list already, I might aswell just use that list and add it to the local storage service.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Contributing
+
+Any contributions are more than welcome. Just be sure to make A PR and I will take A look at the code and happily merge the changes if it is worth it.
+
