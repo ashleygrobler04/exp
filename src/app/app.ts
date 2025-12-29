@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Expense } from './expense/expense';
 import { Category } from './category';
 import { ObjDropdown } from './obj-dropdown/obj-dropdown';
@@ -6,6 +6,7 @@ import { ExpInput } from './exp-input/exp-input';
 import { ExpensePriceInput } from './expense-price-input/expense-price-input';
 import { IExpense } from './iexpense';
 import uuid4 from 'uuid4';
+import { ExpenseStorageService } from './expense-storage-service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import uuid4 from 'uuid4';
 })
 export class App {
   protected readonly title: string = "Exp";
+  private storage=inject(ExpenseStorageService);
   cat = Category
   expenses: Array<IExpense> = [];
   expenseTitle: string = "";
@@ -35,6 +37,7 @@ export class App {
   addExpense() {
     this.expenses.push({ id: uuid4(), category: this.expenseCategory, price: this.expensePrice, title: this.expenseTitle });
     this.totalWithoutCat.set(this.GetTotalExpenseCost());
+    this.storage.saveExpenses(this.expenses);
   }
 
   setExpenseTitle(title: string) {
@@ -52,6 +55,7 @@ export class App {
   deleteExpense(id: string) {
     this.expenses = this.removeExpenseById(id);
     this.totalWithoutCat.set(this.GetTotalExpenseCost());
+    this.storage.saveExpenses(this.expenses);
   }
 
   //Get the total for all expenses in the list excluding specific categories
@@ -86,5 +90,10 @@ export class App {
 
   setFilterValue(fv:string){
     this.filterValue.set(fv);
+  }
+
+  ngOnInit() {
+    this.expenses=this.storage.loadExpenses();
+    this.totalWithoutCat.set(this.GetTotalExpenseCost());
   }
 }
