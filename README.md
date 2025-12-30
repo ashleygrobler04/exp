@@ -7,16 +7,12 @@ An expense tracker written in angular. This just me learning angular, what bette
 In order to run the application, make sure you got all the deps installed by doing the following:
 
 ```
-
-NPM
-
 npm install
 ```
 
 Then do:
 
 ```
-npm
 npm start
 
 ```
@@ -40,7 +36,6 @@ I purposfully did not add the functionality to edit an expense as you will be ab
 
 
 * I probably have to work on the styling. Since I am blind, this is not where I shine at all. Though I will probs try to do so with AI in the near future.
-* Local storage: Allow for the application to percist data to the local storage, by writing A service that will just save and remove data if and when needed, as we handle expense removal and insertion in A list already, I might aswell just use that list and add it to the local storage service.
 
 
 ## Contributing
