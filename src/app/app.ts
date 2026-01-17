@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core'; // Added imports for Component, inject, and signal
 import { Expense } from './expense/expense';
 import { Category } from './category';
 import { ObjDropdown } from './obj-dropdown/obj-dropdown';
@@ -16,7 +16,7 @@ import { ExpenseStorageService } from './expense-storage-service';
 })
 export class App {
   protected readonly title: string = "Exp";
-  private storage=inject(ExpenseStorageService);
+  private storage = inject(ExpenseStorageService);
   cat = Category
   expenses: Array<IExpense> = [];
   expenseTitle: string = "";
@@ -24,8 +24,8 @@ export class App {
   expensePrice: number = 0.0;
   disabled = signal<boolean>(false);
   totalWithoutCat = signal<number>(0);
-  shouldFilter= signal<boolean>(false);
-  filterValue=signal<string>("");
+  shouldFilter = signal<boolean>(false);
+  filterValue = signal<string>("");
 
   /**
    *Kind of try to initialize A component without other methods...
@@ -88,12 +88,22 @@ export class App {
     //console.log(`checkbox set to ${this.shouldFilter()}`);
   }
 
-  setFilterValue(fv:string){
+  setFilterValue(fv: string) {
     this.filterValue.set(fv);
   }
 
   ngOnInit() {
-    this.expenses=this.storage.loadExpenses();
+    this.expenses = this.storage.loadExpenses();
     this.totalWithoutCat.set(this.GetTotalExpenseCost());
   }
+
+  visibleExpenses = computed((): Array<IExpense> => {
+    if (!this.shouldFilter()) {
+      return this.expenses;
+    }
+
+    return this.expenses.filter(
+      e => e.category === this.filterValue()
+    );
+  });
 }

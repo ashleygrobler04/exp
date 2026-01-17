@@ -3,30 +3,29 @@
 <br />
 <span>
     @if (!shouldFilter()) {
-    Total spent: {{totalWithoutCat()}}
-    }
-    @else {
-    Total spent on {{filterValue()}}: {{TotalWithCat(filterValue())}}
+        Total spent: {{totalWithoutCat()}}
+    } @else {
+        Total spent on {{filterValue()}}: {{TotalWithCat(filterValue())}}
     }
 </span><br />
 <label for="filter-checkbox">Filter?</label><br />
 <input type="checkbox" [checked]="shouldFilter()" (change)="toggleFilter()" id="filter-checkbox" /><br />
-@if (shouldFilter()===true) {
-<app-obj-dropdown (selectedCategoryOutput)="setFilterValue($event)" /><br />
-<span>Filtering by {{filterValue()}}</span>
+@if (shouldFilter()) {
+    <app-obj-dropdown (selectedCategoryOutput)="setFilterValue($event)" /><br />
+    <span>Filtering by {{filterValue()}}</span>
 }
-<h2>Expenses ({{this.expenses.length}})</h2>
-@if (this.expenses.length<=0) { <p>No expenses found.</p>
+<h2>Expenses ({{visibleExpenses().length}})</h2>
+@if (visibleExpenses().length <= 0) {
+    <p>No expenses found.</p>
+} @else {
+    @for (e of visibleExpenses(); track e.id) {
+        <app-expense [title]="e.title" [price]="e.price" [category]="e.category" />
+        <button (click)="deleteExpense(e.id)">Delete expense {{e.title}}</button><br />
     }
-    @else {
-    @for (e of this.expenses; track e.id) {
-    <app-expense [title]="e.title" [price]="e.price" [category]="e.category" />
-    <button (click)="deleteExpense(e.id)">Delete expense {{e.title}}</button><br />
-    }
-    }
+}
     <br />
     <app-expense-price-input (priceInputOutput)="setPrice($event)" /><br />
     <app-obj-dropdown (selectedCategoryOutput)="setCategory($event)" /><br />
     <app-exp-input (expenseTitleOutput)="setExpenseTitle($event)" /><br />
 
-    <button (click)="this.addExpense()">Add expense</button>
+<button (click)="addExpense()">Add expense</button>
