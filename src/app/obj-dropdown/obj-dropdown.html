@@ -1,5 +1,5 @@
 <label for="obj-dropdown">Select A category</label>
-<select id="obj-dropdown" (change)="categoryChange($event)" [value]="selectedCategory()">
+<select id="obj-dropdown" (change)="categoryChange($event)" [value]="category">
     @for (cc of categories; track cc) {
         <option [value]="cc">{{cc}}</option>
     }

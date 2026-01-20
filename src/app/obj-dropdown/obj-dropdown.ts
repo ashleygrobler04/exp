@@ -1,4 +1,4 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, output, signal, Input, OnInit } from '@angular/core';
 import { Category } from '../category';
 
 @Component({
@@ -7,16 +7,16 @@ import { Category } from '../category';
   templateUrl: './obj-dropdown.html',
   styleUrl: './obj-dropdown.css',
 })
-export class ObjDropdown {
+export class ObjDropdown implements OnInit {
   c = Category;
   //get A list of all categories
   categories = this.catToList();
-  selectedCategory = signal<string>(this.categories[0]);
+  @Input() category: string = this.categories[0];
   //again, attempt to set the output so that it can be shared with all components
   selectedCategoryOutput = output<string>();
 
   ngOnInit() {
-    this.selectedCategoryOutput.emit(this.selectedCategory());
+    this.selectedCategoryOutput.emit(this.category);
   }
 
   catToList() {
@@ -24,8 +24,7 @@ export class ObjDropdown {
   }
 
   categoryChange(event: Event) {
-    var elem = event.target as HTMLInputElement;
-    this.selectedCategory.set(elem.value);
+    var elem = event.target as HTMLSelectElement;
     this.selectedCategoryOutput.emit(elem.value);
   }
 }

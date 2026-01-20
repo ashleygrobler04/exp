@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core'; // Added imports for Component, inject, and signal
+import { Component, computed, inject, signal, OnInit } from '@angular/core'; // Added imports for Component, inject, and signal
 import { Expense } from './expense/expense';
 import { Category } from './category';
 import { ObjDropdown } from './obj-dropdown/obj-dropdown';
@@ -14,16 +14,16 @@ import { ExpenseStorageService } from './expense-storage-service';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title: string = "Exp";
   private storage = inject(ExpenseStorageService);
   cat = Category
-  expenses: Array<IExpense> = [];
+  expenses = signal<Array<IExpense>>([]);
   expenseTitle: string = "";
-  expenseCategory: string = "";
+  expenseCategory: string = Object.values(Category)[0];
   expensePrice: number = 0.0;
   disabled = signal<boolean>(false);
-  totalWithoutCat = signal<number>(0);
+  totalWithoutCat = computed(() => this.GetTotalExpenseCost());
   shouldFilter = signal<boolean>(false);
   filterValue = signal<string>("");
 
@@ -31,13 +31,21 @@ export class App {
    *Kind of try to initialize A component without other methods...
    */
   constructor() {
-    this.totalWithoutCat.set(this.GetTotalExpenseCost());
+    // Load expenses in ngOnInit
   }
 
   addExpense() {
-    this.expenses.push({ id: uuid4(), category: this.expenseCategory, price: this.expensePrice, title: this.expenseTitle });
-    this.totalWithoutCat.set(this.GetTotalExpenseCost());
-    this.storage.saveExpenses(this.expenses);
+    if (this.expenseTitle === "" || this.expensePrice <= 0) {
+      alert("Please ensure both price and title is set");
+      return;
+    }
+    const newExpense = { id: uuid4(), category: this.expenseCategory, price: this.expensePrice, title: this.expenseTitle };
+    this.expenses.set([...this.expenses(), newExpense]);
+    this.storage.saveExpenses(this.expenses());
+    // Clear the fields
+    this.expenseTitle = "";
+    this.expenseCategory = Object.values(this.cat)[0];
+    this.expensePrice = 0.0;
   }
 
   setExpenseTitle(title: string) {
@@ -53,15 +61,15 @@ export class App {
   }
 
   deleteExpense(id: string) {
-    this.expenses = this.removeExpenseById(id);
-    this.totalWithoutCat.set(this.GetTotalExpenseCost());
-    this.storage.saveExpenses(this.expenses);
+    const filtered = this.expenses().filter(e => e.id !== id);
+    this.expenses.set(filtered);
+    this.storage.saveExpenses(this.expenses());
   }
 
   //Get the total for all expenses in the list excluding specific categories
   GetTotalExpenseCost(): number {
     var tmp = 0;
-    this.expenses.forEach((ex) => {
+    this.expenses().forEach((ex) => {
       tmp += ex.price;
     });
     return tmp;
@@ -70,17 +78,12 @@ export class App {
   //Get the expense total based on category
   TotalWithCat(cat: string): number {
     let tmp = 0;
-    this.expenses.forEach((ex) => {
+    this.expenses().forEach((ex) => {
       if (ex.category === cat) {
         tmp += ex.price;
       }
     });
     return tmp;
-  }
-
-  removeExpenseById(id: string): Array<IExpense> {
-    var filteredItems = this.expenses.filter((e => e.id != id));
-    return filteredItems;
   }
 
   toggleFilter() {
@@ -93,16 +96,16 @@ export class App {
   }
 
   ngOnInit() {
-    this.expenses = this.storage.loadExpenses();
-    this.totalWithoutCat.set(this.GetTotalExpenseCost());
+    const loadedExpenses = this.storage.loadExpenses();
+    this.expenses.set(loadedExpenses);
   }
 
   visibleExpenses = computed((): Array<IExpense> => {
     if (!this.shouldFilter()) {
-      return this.expenses;
+      return this.expenses();
     }
 
-    return this.expenses.filter(
+    return this.expenses().filter(
       e => e.category === this.filterValue()
     );
   });

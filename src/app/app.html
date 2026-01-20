@@ -11,7 +11,7 @@
 <label for="filter-checkbox">Filter?</label><br />
 <input type="checkbox" [checked]="shouldFilter()" (change)="toggleFilter()" id="filter-checkbox" /><br />
 @if (shouldFilter()) {
-    <app-obj-dropdown (selectedCategoryOutput)="setFilterValue($event)" /><br />
+    <app-obj-dropdown [category]="filterValue()" (selectedCategoryOutput)="setFilterValue($event)" /><br />
     <span>Filtering by {{filterValue()}}</span>
 }
 <h2>Expenses ({{visibleExpenses().length}})</h2>
@@ -24,8 +24,8 @@
     }
 }
     <br />
-    <app-expense-price-input (priceInputOutput)="setPrice($event)" /><br />
-    <app-obj-dropdown (selectedCategoryOutput)="setCategory($event)" /><br />
-    <app-exp-input (expenseTitleOutput)="setExpenseTitle($event)" /><br />
+    <app-expense-price-input [price]="expensePrice" (priceInputOutput)="setPrice($event)" /><br />
+    <app-obj-dropdown [category]="expenseCategory" (selectedCategoryOutput)="setCategory($event)" /><br />
+    <app-exp-input [title]="expenseTitle" (expenseTitleOutput)="setExpenseTitle($event)" /><br />
 
 <button (click)="addExpense()">Add expense</button>
