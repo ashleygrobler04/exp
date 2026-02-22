@@ -109,4 +109,14 @@ export class App implements OnInit {
       e => e.category === this.filterValue()
     );
   });
+
+  //The export button
+  onExportClick() {
+    this.storage.exportExpenses();
+  }
+
+  //import button
+  onImportClick() {
+    this.storage.importExpenses();
+  }
 }

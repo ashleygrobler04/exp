@@ -1,6 +1,10 @@
 <h1>Exp</h1>
 <p>Exp short for Expense, is a web application that helps you to keep track of your expenses easily.</p>
 <br />
+<button (click)="onExportClick()">Exporte expenses</button>
+<br/>
+<button (click)="onImportClick()">Import expenses</button>
+<br/>
 <span>
     @if (!shouldFilter()) {
         Total spent: {{totalWithoutCat()}}
