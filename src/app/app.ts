@@ -119,4 +119,13 @@ export class App implements OnInit {
   onImportClick() {
     this.storage.importExpenses();
   }
+
+  updateExpense(updated: IExpense) {
+    const idx = this.expenses().findIndex(e => e.id === updated.id);
+    if (idx === -1) return;
+    const arr = [...this.expenses()];
+    arr[idx] = updated;
+    this.expenses.set(arr);
+    this.storage.saveExpenses(this.expenses());
+  }
 }

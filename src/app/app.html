@@ -23,7 +23,7 @@
     <p>No expenses found.</p>
 } @else {
     @for (e of visibleExpenses(); track e.id) {
-        <app-expense [title]="e.title" [price]="e.price" [category]="e.category" />
+        <app-expense [id]="e.id" [title]="e.title" [price]="e.price" [category]="e.category" (expenseUpdated)="updateExpense($event)" />
         <button (click)="deleteExpense(e.id)">Delete expense {{e.title}}</button><br />
     }
 }

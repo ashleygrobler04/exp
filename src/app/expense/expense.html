@@ -1,5 +1,18 @@
-<h3>{{title()}}</h3>
-<span>Price: {{price()}}</span><br/>
-<span>Category: {{category()}}</span>
+@if (!editing()) {
+	<div (click)="startEdit()">
+		<h3>{{title()}}</h3>
+		<span>Price: {{price()}}</span><br/>
+		<span>Category: {{category()}}</span>
+	</div>
+} @else {
+	<div>
+		<input type="text" [value]="editTitle()" (input)="setEditTitle($event)" />
+		<input type="number" [value]="editPrice()" (input)="setEditPrice($event)" />
+		<input type="text" [value]="editCategory()" (input)="setEditCategory($event)" />
+		<button (click)="cancelEdit()">Cancel</button>
+		<button (click)="saveEdit()">OK</button>
+		<button (click)="saveEdit()">Done</button>
+	</div>
+}
 <hr/>
 
