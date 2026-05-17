@@ -1,1 +1,12 @@
-<input type="number" placeholder="Enter price" inputmode="decimal" [value]="price" (input)="setPriceInput($event)"/>
+<mat-form-field appearance="fill" class="field">
+  <mat-label>Expense price</mat-label>
+  <input
+    matInput
+    id="expense-price"
+    type="number"
+    inputmode="decimal"
+    [value]="price"
+    (input)="setPriceInput($event)"
+    aria-label="Expense price"
+  />
+</mat-form-field>

@@ -1,59 +1,64 @@
-import { Component, input, signal, output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { IExpense } from '../iexpense';
 
 @Component({
+  standalone: true,
   selector: 'app-expense',
-  imports: [],
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatDividerModule, MatFormFieldModule, MatInputModule],
   templateUrl: './expense.html',
-  styleUrl: './expense.css',
+  styleUrls: ['./expense.css'],
 })
 export class Expense {
-  id = input<string>();
-  title = input<string>();
-  price = input<number>();
-  category = input<string>();
+  @Input() id = '';
+  @Input() title = '';
+  @Input() price = 0;
+  @Input() category = '';
 
-  expenseUpdated = output<IExpense>();
+  @Output() expenseUpdated = new EventEmitter<IExpense>();
 
-  editing = signal(false);
-  editTitle = signal('');
-  editPrice = signal(0);
-  editCategory = signal('');
+  editing = false;
+  editTitle = '';
+  editPrice = 0;
+  editCategory = '';
 
   startEdit() {
-    this.editTitle.set(this.title() ?? '');
-    this.editPrice.set(this.price() ?? 0);
-    this.editCategory.set(this.category() ?? '');
-    this.editing.set(true);
+    this.editTitle = this.title;
+    this.editPrice = this.price;
+    this.editCategory = this.category;
+    this.editing = true;
   }
 
   cancelEdit() {
-    this.editing.set(false);
+    this.editing = false;
   }
 
   setEditTitle(event: Event) {
-    const v = (event.target as HTMLInputElement).value;
-    this.editTitle.set(v);
+    this.editTitle = (event.target as HTMLInputElement).value;
   }
 
   setEditPrice(event: Event) {
     const v = parseFloat((event.target as HTMLInputElement).value);
-    this.editPrice.set(isNaN(v) ? 0 : v);
+    this.editPrice = isNaN(v) ? 0 : v;
   }
 
   setEditCategory(event: Event) {
-    const v = (event.target as HTMLInputElement).value;
-    this.editCategory.set(v);
+    this.editCategory = (event.target as HTMLInputElement).value;
   }
 
   saveEdit() {
     const updated: IExpense = {
-      id: this.id() ?? '',
-      title: this.editTitle(),
-      price: this.editPrice(),
-      category: this.editCategory(),
+      id: this.id,
+      title: this.editTitle,
+      price: this.editPrice,
+      category: this.editCategory,
     };
     this.expenseUpdated.emit(updated);
-    this.editing.set(false);
+    this.editing = false;
   }
 }

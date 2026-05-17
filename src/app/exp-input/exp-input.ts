@@ -1,21 +1,21 @@
-import { Component, computed, output, signal, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
+  standalone: true,
   selector: 'app-exp-input',
-  imports: [],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './exp-input.html',
-  styleUrl: './exp-input.css',
+  styleUrls: ['./exp-input.css'],
 })
 export class ExpInput {
-  @Input() title: string = "";
-  //add output for title so that other components can find it I think?
-  expenseTitleOutput = output<string>();
+  @Input() title = '';
+  @Output() expenseTitleOutput = new EventEmitter<string>();
 
   changeExpenseTitle(event: Event) {
-    var elem = event.target as HTMLInputElement;
-    //Testing...
-    //console.log(elem.value);
+    const elem = event.target as HTMLInputElement;
     this.expenseTitleOutput.emit(elem.value);
   }
-
 }

@@ -1,35 +1,73 @@
-<h1>Exp</h1>
-<p>Exp short for Expense, is a web application that helps you to keep track of your expenses easily.</p>
-<br />
-<button (click)="onExportClick()">Exporte expenses</button>
-<br/>
-<button (click)="onImportClick()">Import expenses</button>
-<br/>
-<span>
-    @if (!shouldFilter()) {
-        Total spent: {{totalWithoutCat()}}
-    } @else {
-        Total spent on {{filterValue()}}: {{TotalWithCat(filterValue())}}
-    }
-</span><br />
-<label for="filter-checkbox">Filter?</label><br />
-<input type="checkbox" [checked]="shouldFilter()" (change)="toggleFilter()" id="filter-checkbox" /><br />
-@if (shouldFilter()) {
-    <app-obj-dropdown [category]="filterValue()" (selectedCategoryOutput)="setFilterValue($event)" /><br />
-    <span>Filtering by {{filterValue()}}</span>
-}
-<h2>Expenses ({{visibleExpenses().length}})</h2>
-@if (visibleExpenses().length <= 0) {
-    <p>No expenses found.</p>
-} @else {
-    @for (e of visibleExpenses(); track e.id) {
-        <app-expense [id]="e.id" [title]="e.title" [price]="e.price" [category]="e.category" (expenseUpdated)="updateExpense($event)" />
-        <button (click)="deleteExpense(e.id)">Delete expense {{e.title}}</button><br />
-    }
-}
-    <br />
-    <app-expense-price-input [price]="expensePrice" (priceInputOutput)="setPrice($event)" /><br />
-    <app-obj-dropdown [category]="expenseCategory" (selectedCategoryOutput)="setCategory($event)" /><br />
-    <app-exp-input [title]="expenseTitle" (expenseTitleOutput)="setExpenseTitle($event)" /><br />
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  <span>Exp</span>
+</mat-toolbar>
 
-<button (click)="addExpense()">Add expense</button>
+<div class="app-container">
+  <section aria-labelledby="app-description">
+    <p id="app-description">Exp is a web application that helps you keep track of your expenses easily.</p>
+  </section>
+
+  <div class="button-row">
+    <button mat-flat-button color="primary" (click)="onExportClick()" aria-label="Export expenses">
+      Export expenses
+    </button>
+    <button mat-flat-button color="accent" (click)="onImportClick()" aria-label="Import expenses">
+      Import expenses
+    </button>
+  </div>
+
+  <div class="filter-row">
+    <mat-checkbox [checked]="shouldFilter()" (change)="toggleFilter()" id="filter-checkbox">
+      Filter expenses by category
+    </mat-checkbox>
+  </div>
+
+  @if (shouldFilter()) {
+    <section aria-labelledby="filter-heading">
+      <h3 id="filter-heading">Filter expenses</h3>
+      <app-obj-dropdown [category]="filterValue()" (selectedCategoryOutput)="setFilterValue($event)"></app-obj-dropdown>
+      <p aria-live="polite">Filtering by {{filterValue()}}</p>
+    </section>
+  }
+
+  <section role="status" aria-live="polite" aria-labelledby="total-heading">
+    <h2 id="total-heading">Total spent</h2>
+    @if (!shouldFilter()) {
+      Total spent: {{totalWithoutCat()}}
+    } @else {
+      Total spent on {{filterValue()}}: {{TotalWithCat(filterValue())}}
+    }
+  </section>
+
+  <section aria-labelledby="expenses-heading" class="expense-list">
+    <h2 id="expenses-heading">Expenses ({{visibleExpenses().length}})</h2>
+    @if (visibleExpenses().length <= 0) {
+      <p>No expenses found.</p>
+    } @else {
+      @for (e of visibleExpenses(); track e.id) {
+        <div class="expense-item">
+          <app-expense
+            [id]="e.id"
+            [title]="e.title"
+            [price]="e.price"
+            [category]="e.category"
+            (expenseUpdated)="updateExpense($event)"
+          ></app-expense>
+          <button mat-stroked-button color="warn" (click)="deleteExpense(e.id)" aria-label="Delete expense {{e.title}}">
+            Delete
+          </button>
+        </div>
+      }
+    }
+  </section>
+
+  <section aria-labelledby="add-expense-heading" class="add-expense-section">
+    <h2 id="add-expense-heading">Add new expense</h2>
+    <app-expense-price-input [price]="expensePrice" (priceInputOutput)="setPrice($event)"></app-expense-price-input>
+    <app-obj-dropdown [category]="expenseCategory" (selectedCategoryOutput)="setCategory($event)"></app-obj-dropdown>
+    <app-exp-input [title]="expenseTitle" (expenseTitleOutput)="setExpenseTitle($event)"></app-exp-input>
+    <button mat-flat-button color="accent" (click)="addExpense()" aria-label="Add expense">
+      Add expense
+    </button>
+  </section>
+</div>

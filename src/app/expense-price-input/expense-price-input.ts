@@ -1,18 +1,22 @@
-import { Component, output, signal, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  standalone: true,
   selector: 'app-expense-price-input',
-  imports: [],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './expense-price-input.html',
-  styleUrl: './expense-price-input.css',
+  styleUrls: ['./expense-price-input.css'],
 })
 export class ExpensePriceInput {
-  @Input() price: number = 0.0;
-  priceInputOutput=output<number>();
+  @Input() price = 0.0;
+  @Output() priceInputOutput = new EventEmitter<number>();
 
   setPriceInput(event: Event) {
-    var ev = event.target as HTMLInputElement;
-    //emit to the rest of the components I think?
-    this.priceInputOutput.emit(parseFloat(ev.value));
+    const ev = event.target as HTMLInputElement;
+    this.priceInputOutput.emit(parseFloat(ev.value) || 0);
   }
 }

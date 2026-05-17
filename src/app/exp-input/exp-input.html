@@ -1,1 +1,12 @@
-<input [value]="title" (input)="changeExpenseTitle($event)" placeholder="Enter expense title"/>
+<mat-form-field appearance="fill" class="field">
+  <mat-label>Expense title</mat-label>
+  <input
+    matInput
+    id="expense-title"
+    type="text"
+    [value]="title"
+    (input)="changeExpenseTitle($event)"
+    placeholder="Enter expense title"
+    aria-label="Expense title"
+  />
+</mat-form-field>

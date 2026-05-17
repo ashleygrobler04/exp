@@ -1,22 +1,27 @@
-import { Component, output, signal, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Category } from '../category';
 
 @Component({
+  standalone: true,
   selector: 'app-obj-dropdown',
-  imports: [],
+  imports: [CommonModule, MatFormFieldModule, MatSelectModule, MatInputModule],
   templateUrl: './obj-dropdown.html',
-  styleUrl: './obj-dropdown.css',
+  styleUrls: ['./obj-dropdown.css'],
 })
 export class ObjDropdown implements OnInit {
   c = Category;
-  //get A list of all categories
   categories = this.catToList();
-  @Input() category: string = this.categories[0];
-  //again, attempt to set the output so that it can be shared with all components
-  selectedCategoryOutput = output<string>();
+  @Input() category = this.categories[0] ?? '';
+  @Output() selectedCategoryOutput = new EventEmitter<string>();
 
   ngOnInit() {
-    this.selectedCategoryOutput.emit(this.category);
+    if (!this.category && this.categories.length > 0) {
+      this.category = this.categories[0] ?? '';
+    }
   }
 
   catToList() {
@@ -24,7 +29,7 @@ export class ObjDropdown implements OnInit {
   }
 
   categoryChange(event: Event) {
-    var elem = event.target as HTMLSelectElement;
+    const elem = event.target as HTMLSelectElement;
     this.selectedCategoryOutput.emit(elem.value);
   }
 }

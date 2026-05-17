@@ -1,0 +1,32 @@
+.app-container {
+  display: grid;
+  gap: 24px;
+}
+
+.button-row,
+.filter-row,
+.add-expense-section,
+.expense-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.field {
+  min-width: 240px;
+  width: 100%;
+}
+
+.expense-item {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.expense-item button {
+  flex: 0 0 auto;
+}
+
+.mat-card {
+  width: 100%;
+}

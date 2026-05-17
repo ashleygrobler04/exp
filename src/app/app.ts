@@ -1,4 +1,13 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core'; // Added imports for Component, inject, and signal
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { Expense } from './expense/expense';
 import { Category } from './category';
 import { ObjDropdown } from './obj-dropdown/obj-dropdown';
@@ -9,10 +18,25 @@ import uuid4 from 'uuid4';
 import { ExpenseStorageService } from './expense-storage-service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  imports: [Expense, ObjDropdown, ExpInput, ExpensePriceInput],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    Expense,
+    ObjDropdown,
+    ExpInput,
+    ExpensePriceInput,
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 export class App implements OnInit {
   protected readonly title: string = "Exp";

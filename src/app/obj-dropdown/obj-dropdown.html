@@ -1,6 +1,8 @@
-<label for="obj-dropdown">Select A category</label>
-<select id="obj-dropdown" (change)="categoryChange($event)" [value]="category">
+<mat-form-field appearance="fill" class="field">
+  <mat-label>Select a category</mat-label>
+  <mat-select [value]="category" (selectionChange)="selectedCategoryOutput.emit($event.value)" aria-label="Category selector">
     @for (cc of categories; track cc) {
-        <option [value]="cc">{{cc}}</option>
+      <mat-option [value]="cc">{{cc}}</mat-option>
     }
-</select>
+  </mat-select>
+</mat-form-field>
